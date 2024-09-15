@@ -28,8 +28,18 @@ override LDFLAGS += # Nothing
 ### On macOS, include <argp.h> from Homebrew package `argp-standalone`
 ifneq ($(OS),Windows_NT)
 	ifeq ($(shell uname -s),Darwin)
-                override CFLAGS  += -I/opt/homebrew/Cellar/argp-standalone/1.5.0/include/
-                override LDFLAGS += -L/opt/homebrew/Cellar/argp-standalone/1.5.0/lib/ -largp
+		UNAME_M := $(shell uname -m)
+		ifeq ($(UNAME_M),arm64)
+			# Apple Silicon
+			ARGP_PREFIX := /opt/homebrew/opt/argp-standalone
+		else ifeq ($(UNAME_M),x86_64)
+			# Intel Macs
+			ARGP_PREFIX := /usr/local/opt/argp-standalone
+		else
+			$(error Unsupported architecture $(UNAME_M))
+		endif
+		override CFLAGS  += -I$(ARGP_PREFIX)/include/
+		override LDFLAGS += -L$(ARGP_PREFIX)/lib/ -largp
 	endif
 endif
 
