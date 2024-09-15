@@ -13,8 +13,10 @@ override CFLAGS += \
 -Wall \
 -Wextra \
 -Wno-incompatible-pointer-types \
--Wno-multichar \
 -Wno-unused-variable \
+-Wno-unused-but-set-variable \
+-Wno-deprecated-non-prototype \
+-Wno-multichar \
 -Wno-unused-parameter \
 -Wno-missing-field-initializers \
 -I./$(INCDIR)
@@ -26,8 +28,8 @@ override LDFLAGS += # Nothing
 ### On macOS, include <argp.h> from Homebrew package `argp-standalone`
 ifneq ($(OS),Windows_NT)
 	ifeq ($(shell uname -s),Darwin)
-		override CFLAGS  += -I/usr/local/Cellar/argp-standalone/1.3/include/
-		override LDFLAGS += -L/usr/local/Cellar/argp-standalone/1.3/lib/ -largp
+                override CFLAGS  += -I/opt/homebrew/Cellar/argp-standalone/1.5.0/include/
+                override LDFLAGS += -L/opt/homebrew/Cellar/argp-standalone/1.5.0/lib/ -largp
 	endif
 endif
 
