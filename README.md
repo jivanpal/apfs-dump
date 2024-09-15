@@ -38,7 +38,7 @@ Documentation for versioned releases and as generated from the `main` branch
   - On Ubuntu, ensure that the package `libc6-dev` is installed.
   
   - On macOS, you can install just Argp via the [Homebrew](https://brew.sh)
-    package `argp-standalone`. The Makefile will handle this configuration
+    package `argp-standalone`, with command `brew install argp-standalone`. The Makefile will handle this configuration
     automatically. If you acquire Argp any other way, such as by installing
     glibc in its entirety, you may need to configure `CFLAGS` and `LDFLAGS` as
     appropriate.
