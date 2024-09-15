@@ -13,8 +13,10 @@ override CFLAGS += \
 -Wall \
 -Wextra \
 -Wno-incompatible-pointer-types \
--Wno-multichar \
 -Wno-unused-variable \
+-Wno-unused-but-set-variable \
+-Wno-deprecated-non-prototype \
+-Wno-multichar \
 -Wno-unused-parameter \
 -Wno-missing-field-initializers \
 -I./$(INCDIR)
@@ -26,8 +28,18 @@ override LDFLAGS += # Nothing
 ### On macOS, include <argp.h> from Homebrew package `argp-standalone`
 ifneq ($(OS),Windows_NT)
 	ifeq ($(shell uname -s),Darwin)
-		override CFLAGS  += -I/usr/local/Cellar/argp-standalone/1.3/include/
-		override LDFLAGS += -L/usr/local/Cellar/argp-standalone/1.3/lib/ -largp
+		UNAME_M := $(shell uname -m)
+		ifeq ($(UNAME_M),arm64)
+			# Apple Silicon
+			ARGP_PREFIX := /opt/homebrew/opt/argp-standalone
+		else ifeq ($(UNAME_M),x86_64)
+			# Intel Macs
+			ARGP_PREFIX := /usr/local/opt/argp-standalone
+		else
+			$(error Unsupported architecture $(UNAME_M))
+		endif
+		override CFLAGS  += -I$(ARGP_PREFIX)/include/
+		override LDFLAGS += -L$(ARGP_PREFIX)/lib/ -largp
 	endif
 endif
 
